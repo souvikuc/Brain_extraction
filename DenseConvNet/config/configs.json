@@ -1,0 +1,29 @@
+{
+  "BATCH_SIZE": 8,
+  "COMP_PLANE_IDX": {
+    "sagittal": [1, 2],
+    "coronal": [0, 2],
+    "axial": [0, 1]
+  },
+  "DATA_DIR": "/Users/souvik/Neurogazer/projects/dataset/S3_backup",
+  "EPOCHS": 150,
+  "EPSILON": 0.0001,
+  "TOLERANCE": 0.15,
+  "VOXEL_SIZE": [0.7, 0.7, 0.7],
+  "INPUT_SHAPE": {
+    "sagittal": [312, 256, 1],
+    "coronal": [256, 256, 1],
+    "axial": [256, 312, 1]
+  },
+  "VOLUME_SHAPE": [256, 312, 256],
+  "LOG_DIR": "/Users/souvik/Neurogazer/projects/segmentation/brain_extraction/DenseConvNet/run_22/logs",
+  "MODEL_DIR": "/Users/souvik/Neurogazer/projects/segmentation/brain_extraction/DenseConvNet/run_22/model",
+  "NUM_CLASS": 3,
+  "PLANE_IDX": {
+    "sagittal": 0,
+    "coronal": 1,
+    "axial": 2
+  },
+  "STEPS_PER_EPOCH": 30,
+  "CONFIG_DIR": "/Users/souvik/Neurogazer/projects/segmentation/brain_extraction/DenseConvNet/run_22/DenseConvNet/config/configs.json"
+}

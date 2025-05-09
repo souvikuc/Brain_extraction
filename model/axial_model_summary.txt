@@ -1,0 +1,272 @@
+Model: "ResConvNet Model_(run_22)"
+_____________________________________________________________________________________________________________
+ Layer (type)                   Output Shape         Param #     Connected to                     Trainable  
+=============================================================================================================
+ input_21 (InputLayer)          [(None, 256, 312, 1  0           []                               Y          
+                                )]                                                                           
+                                                                                                             
+ EncoderBlock0 (EncoderBlock)   {'encoder_0_output'  18023268    ['input_21[0][0]']               Y          
+                                : (None, 256, 312,                                                           
+                                32)}                                                                         
+                                                                                                             
+ encoder_spp0 (SpatialPyramidPo  (None, 128, 156, 32  4          ['EncoderBlock0[1][0]']          N          
+ oling2D)                       )                                                                            
+                                                                                                             
+ input_22 (InputLayer)          [(None, 256, 312, 1  0           []                               Y          
+                                )]                                                                           
+                                                                                                             
+ EncoderBlock1 (EncoderBlock)   {'encoder_1_output'  10128448    ['encoder_spp0[1][0]']           Y          
+                                : (None, 128, 156,                                                           
+                                64)}                                                                         
+                                                                                                             
+ Laplace_EncoderBlock0 (Encoder  {'encoder_0_output'  18023268   ['input_22[0][0]']               Y          
+ Block)                         : (None, 256, 312,                                                           
+                                32)}                                                                         
+                                                                                                             
+ encoder_spp1 (SpatialPyramidPo  (None, 64, 78, 64)  3           ['EncoderBlock1[1][0]']          N          
+ oling2D)                                                                                                    
+                                                                                                             
+ laplace_encoder_spp0 (SpatialP  (None, 128, 156, 32  4          ['Laplace_EncoderBlock0[1][0]']  N          
+ yramidPooling2D)               )                                                                            
+                                                                                                             
+ EncoderBlock2 (EncoderBlock)   {'encoder_2_output'  6961280     ['encoder_spp1[1][0]']           Y          
+                                : (None, 64, 78, 12                                                          
+                                8)}                                                                          
+                                                                                                             
+ Laplace_EncoderBlock1 (Encoder  {'encoder_1_output'  10128448   ['laplace_encoder_spp0[1][0]']   Y          
+ Block)                         : (None, 128, 156,                                                           
+                                64)}                                                                         
+                                                                                                             
+ encoder_spp2 (SpatialPyramidPo  (None, 32, 39, 128)  3          ['EncoderBlock2[1][0]']          N          
+ oling2D)                                                                                                    
+                                                                                                             
+ laplace_encoder_spp1 (SpatialP  (None, 64, 78, 64)  3           ['Laplace_EncoderBlock1[1][0]']  N          
+ yramidPooling2D)                                                                                            
+                                                                                                             
+ EncoderBlock3 (EncoderBlock)   {'encoder_3_output'  11059456    ['encoder_spp2[1][0]']           Y          
+                                : (None, 32, 39, 25                                                          
+                                6)}                                                                          
+                                                                                                             
+ Laplace_EncoderBlock2 (Encoder  {'encoder_2_output'  6961280    ['laplace_encoder_spp1[1][0]']   Y          
+ Block)                         : (None, 64, 78, 12                                                          
+                                8)}                                                                          
+                                                                                                             
+ encoder3_padding (Resizing)    (None, 32, 40, 256)  0           ['EncoderBlock3[1][0]']          Y          
+                                                                                                             
+ laplace_encoder_spp2 (SpatialP  (None, 32, 39, 128)  3          ['Laplace_EncoderBlock2[1][0]']  N          
+ yramidPooling2D)                                                                                            
+                                                                                                             
+ encoder_spp3 (SpatialPyramidPo  (None, 16, 20, 256)  2          ['encoder3_padding[1][0]']       N          
+ oling2D)                                                                                                    
+                                                                                                             
+ Laplace_EncoderBlock3 (Encoder  {'encoder_3_output'  11059456   ['laplace_encoder_spp2[1][0]']   Y          
+ Block)                         : (None, 32, 39, 25                                                          
+                                6)}                                                                          
+                                                                                                             
+ skip_conv_23 (Conv2D)          (None, 64, 78, 256)  295168      ['EncoderBlock2[1][0]']          Y          
+                                                                                                             
+ BottleNeck (BottleNeck)        {'bottleneck_output  35856896    ['encoder_spp3[1][0]']           Y          
+                                ': (None, 16, 20, 5                                                          
+                                12)}                                                                         
+                                                                                                             
+ boundary_attention3 (Conv2D)   (None, 32, 39, 512)  131584      ['Laplace_EncoderBlock3[1][0]']  Y          
+                                                                                                             
+ skip_spp_23 (SpatialPyramidPoo  (None, 32, 39, 256)  3          ['skip_conv_23[1][0]']           N          
+ ling2D)                                                                                                     
+                                                                                                             
+ boundary_deconv3 (Conv2DTransp  (None, 32, 40, 512)  1049088    ['BottleNeck[1][0]']             Y          
+ ose)                                                                                                        
+                                                                                                             
+ laplace_encoder3_padding (Resi  (None, 32, 40, 512)  0          ['boundary_attention3[1][0]']    Y          
+ zing)                                                                                                       
+                                                                                                             
+ skip_spp23_padding (Resizing)  (None, 32, 40, 256)  0           ['skip_spp_23[1][0]']            Y          
+                                                                                                             
+ boundary_gate_attention3 (Mult  (None, 32, 40, 512)  0          ['boundary_deconv3[1][0]',       Y          
+ iply)                                                            'laplace_encoder3_padding[1][0             
+                                                                 ]']                                         
+                                                                                                             
+ skip_add_23 (Add)              (None, 32, 40, 256)  0           ['encoder3_padding[1][0]',       Y          
+                                                                  'skip_spp23_padding[1][0]']                
+                                                                                                             
+ boundary_DecoderBlock3 (Vanill  {'decoder_3_output'  7283968    ['boundary_gate_attention3[1][0  Y          
+ a_DecoderBlock)                : (None, 32, 40, 25              ]',                                         
+                                6)}                               'skip_add_23[1][0]']                       
+                                                                                                             
+ boundary_resizing (Resizing)   (None, 32, 39, 256)  0           ['boundary_DecoderBlock3[1][0]'  Y          
+                                                                 ]                                           
+                                                                                                             
+ skip_conv_12 (Conv2D)          (None, 128, 156, 12  73856       ['EncoderBlock1[1][0]']          Y          
+                                8)                                                                           
+                                                                                                             
+ boundary_deconv2 (Conv2DTransp  (None, 64, 78, 256)  262400     ['boundary_resizing[1][0]']      Y          
+ ose)                                                                                                        
+                                                                                                             
+ boundary_attention2 (Conv2D)   (None, 64, 78, 256)  33024       ['Laplace_EncoderBlock2[1][0]']  Y          
+                                                                                                             
+ skip_spp_12 (SpatialPyramidPoo  (None, 64, 78, 128)  3          ['skip_conv_12[1][0]']           N          
+ ling2D)                                                                                                     
+                                                                                                             
+ segmentation_deconv3 (Conv2DTr  (None, 32, 40, 512)  1049088    ['BottleNeck[1][0]']             Y          
+ anspose)                                                                                                    
+                                                                                                             
+ attention_gate3 (AttentionGate  (None, 32, 40, 256)  197377     ['BottleNeck[1][0]',             Y          
+ )                                                                'skip_add_23[1][0]']                       
+                                                                                                             
+ boundary_gate_attention2 (Mult  (None, 64, 78, 256)  0          ['boundary_deconv2[1][0]',       Y          
+ iply)                                                            'boundary_attention2[1][0]']               
+                                                                                                             
+ skip_add_12 (Add)              (None, 64, 78, 128)  0           ['EncoderBlock2[1][0]',          Y          
+                                                                  'skip_spp_12[1][0]']                       
+                                                                                                             
+ segmentation_DecoderBlock3 (Va  {'decoder_3_output'  7283968    ['segmentation_deconv3[1][0]',   Y          
+ nilla_DecoderBlock)            : (None, 32, 40, 25               'attention_gate3[1][0]']                   
+                                6)}                                                                          
+                                                                                                             
+ boundary_DecoderBlock2 (Vanill  {'decoder_2_output'  1823360    ['boundary_gate_attention2[1][0  Y          
+ a_DecoderBlock)                : (None, 64, 78, 12              ]',                                         
+                                8)}                               'skip_add_12[1][0]']                       
+                                                                                                             
+ skip_conv_01 (Conv2D)          (None, 256, 312, 64  18496       ['EncoderBlock0[1][0]']          Y          
+                                )                                                                            
+                                                                                                             
+ segmentation_resizing (Resizin  (None, 32, 39, 256)  0          ['segmentation_DecoderBlock3[1]  Y          
+ g)                                                              [0]']                                       
+                                                                                                             
+ boundary_deconv1 (Conv2DTransp  (None, 128, 156, 12  65664      ['boundary_DecoderBlock2[1][0]'  Y          
+ ose)                           8)                               ]                                           
+                                                                                                             
+ boundary_attention1 (Conv2D)   (None, 128, 156, 12  8320        ['Laplace_EncoderBlock1[1][0]']  Y          
+                                8)                                                                           
+                                                                                                             
+ skip_spp_01 (SpatialPyramidPoo  (None, 128, 156, 64  4          ['skip_conv_01[1][0]']           N          
+ ling2D)                        )                                                                            
+                                                                                                             
+ segmentation_deconv2 (Conv2DTr  (None, 64, 78, 256)  262400     ['segmentation_resizing[1][0]']  Y          
+ anspose)                                                                                                    
+                                                                                                             
+ attention_gate2 (AttentionGate  (None, 64, 78, 128)  49537      ['segmentation_resizing[1][0]',  Y          
+ )                                                                'skip_add_12[1][0]']                       
+                                                                                                             
+ boundary_gate_attention1 (Mult  (None, 128, 156, 12  0          ['boundary_deconv1[1][0]',       Y          
+ iply)                          8)                                'boundary_attention1[1][0]']               
+                                                                                                             
+ skip_add_01 (Add)              (None, 128, 156, 64  0           ['EncoderBlock1[1][0]',          Y          
+                                )                                 'skip_spp_01[1][0]']                       
+                                                                                                             
+ segmentation_DecoderBlock2 (Va  {'decoder_2_output'  1823360    ['segmentation_deconv2[1][0]',   Y          
+ nilla_DecoderBlock)            : (None, 64, 78, 12               'attention_gate2[1][0]']                   
+                                8)}                                                                          
+                                                                                                             
+ boundary_DecoderBlock1 (Vanill  {'decoder_1_output'  457024     ['boundary_gate_attention1[1][0  Y          
+ a_DecoderBlock)                : (None, 128, 156,               ]',                                         
+                                64)}                              'skip_add_01[1][0]']                       
+                                                                                                             
+ segmentation_deconv1 (Conv2DTr  (None, 128, 156, 12  65664      ['segmentation_DecoderBlock2[1]  Y          
+ anspose)                       8)                               [0]']                                       
+                                                                                                             
+ attention_gate1 (AttentionGate  (None, 128, 156, 64  12481      ['segmentation_DecoderBlock2[1]  Y          
+ )                              )                                [0]',                                       
+                                                                  'skip_add_01[1][0]']                       
+                                                                                                             
+ fusion_bagm3 (BAGMBlock)       {'bagm_3_output': (  804288      ['segmentation_DecoderBlock3[1]  Y          
+                                None, 32, 40, 256)}              [0]',                                       
+                                                                  'BottleNeck[1][0]',                        
+                                                                  'boundary_DecoderBlock3[1][0]'             
+                                                                 ]                                           
+                                                                                                             
+ boundary_deconv0 (Conv2DTransp  (None, 256, 312, 64  16448      ['boundary_DecoderBlock1[1][0]'  Y          
+ ose)                           )                                ]                                           
+                                                                                                             
+ boundary_attention0 (Conv2D)   (None, 256, 312, 64  2112        ['Laplace_EncoderBlock0[1][0]']  Y          
+                                )                                                                            
+                                                                                                             
+ segmentation_DecoderBlock1 (Va  {'decoder_1_output'  457024     ['segmentation_deconv1[1][0]',   Y          
+ nilla_DecoderBlock)            : (None, 128, 156,                'attention_gate1[1][0]']                   
+                                64)}                                                                         
+                                                                                                             
+ fusion_resizing (Resizing)     (None, 32, 39, 256)  0           ['fusion_bagm3[1][0]']           Y          
+                                                                                                             
+ boundary_gate_attention0 (Mult  (None, 256, 312, 64  0          ['boundary_deconv0[1][0]',       Y          
+ iply)                          )                                 'boundary_attention0[1][0]']               
+                                                                                                             
+ segmentation_deconv0 (Conv2DTr  (None, 256, 312, 64  16448      ['segmentation_DecoderBlock1[1]  Y          
+ anspose)                       )                                [0]']                                       
+                                                                                                             
+ attention_gate0 (AttentionGate  (None, 256, 312, 32  3169       ['segmentation_DecoderBlock1[1]  Y          
+ )                              )                                [0]',                                       
+                                                                  'EncoderBlock0[1][0]']                     
+                                                                                                             
+ fusion_bagm2 (BAGMBlock)       {'bagm_2_output': (  213760      ['segmentation_DecoderBlock2[1]  Y          
+                                None, 64, 78, 128)}              [0]',                                       
+                                                                  'fusion_resizing[1][0]',                   
+                                                                  'boundary_DecoderBlock2[1][0]'             
+                                                                 ]                                           
+                                                                                                             
+ boundary_DecoderBlock0 (Vanill  {'decoder_0_output'  114848     ['boundary_gate_attention0[1][0  Y          
+ a_DecoderBlock)                : (None, 256, 312,               ]',                                         
+                                32)}                              'EncoderBlock0[1][0]']                     
+                                                                                                             
+ segmentation_DecoderBlock0 (Va  {'decoder_0_output'  114848     ['segmentation_deconv0[1][0]',   Y          
+ nilla_DecoderBlock)            : (None, 256, 312,                'attention_gate0[1][0]']                   
+                                32)}                                                                         
+                                                                                                             
+ fusion_bagm1 (BAGMBlock)       {'bagm_1_output': (  59808       ['segmentation_DecoderBlock1[1]  Y          
+                                None, 128, 156, 64)              [0]',                                       
+                                }                                 'fusion_bagm2[1][0]',                      
+                                                                  'boundary_DecoderBlock1[1][0]'             
+                                                                 ]                                           
+                                                                                                             
+ fusion_bagm0 (BAGMBlock)       {'bagm_0_output': (  18160       ['segmentation_DecoderBlock0[1]  Y          
+                                None, 256, 312, 32)              [0]',                                       
+                                }                                 'fusion_bagm1[1][0]',                      
+                                                                  'boundary_DecoderBlock0[1][0]'             
+                                                                 ]                                           
+                                                                                                             
+ boundary_probability_map (Conv  (None, 256, 312, 2)  66         ['boundary_DecoderBlock0[1][0]'  Y          
+ 2D)                                                             ]                                           
+                                                                                                             
+ segmentation_probability_map (  (None, 256, 312, 3)  99         ['segmentation_DecoderBlock0[1]  Y          
+ Conv2D)                                                         [0]']                                       
+                                                                                                             
+ fusion_probability_map (Conv2D  (None, 256, 312, 3)  99         ['fusion_bagm0[1][0]']           Y          
+ )                                                                                                           
+                                                                                                             
+ boundary_boundary_mask (Lambda  (None, 256, 312, 1)  0          ['boundary_probability_map[1][0  N          
+ )                                                               ]']                                         
+                                                                                                             
+ mean_segmentation_map (Average  (None, 256, 312, 3)  0          ['fusion_probability_map[1][0]'  Y          
+ )                                                               , 'segmentation_probability_map             
+                                                                 [1][0]']                                    
+                                                                                                             
+ tf.cast_7 (TFOpLambda)         (None, 256, 312, 1)  0           ['boundary_boundary_mask[1][0]'  Y          
+                                                                 ]                                           
+                                                                                                             
+ segmentation_boundary_mask (Bo  (None, 256, 312, 1)  0          ['segmentation_probability_map[  Y          
+ undaryBlock)                                                    1][0]']                                     
+                                                                                                             
+ fusion_boundary_mask (Boundary  (None, 256, 312, 1)  0          ['fusion_probability_map[1][0]'  Y          
+ Block)                                                          ]                                           
+                                                                                                             
+ final_segmentation_map (Conv2D  (None, 256, 312, 3)  12         ['mean_segmentation_map[1][0]']  Y          
+ )                                                                                                           
+                                                                                                             
+ final_boundary_mask (Average)  (None, 256, 312, 1)  0           ['tf.cast_7[0][0]',              Y          
+                                                                  'segmentation_boundary_mask[1]             
+                                                                 [0]',                                       
+                                                                  'fusion_boundary_mask[1][0]']              
+                                                                                                             
+ final_segmentation_mask (Lambd  (None, 256, 312, 1)  0          ['final_segmentation_map[1][0]'  N          
+ a)                                                              ]                                           
+                                                                                                             
+ fusion_segmentation_mask (Lamb  (None, 256, 312, 1)  0          ['fusion_probability_map[1][0]'  N          
+ da)                                                             ]                                           
+                                                                                                             
+ seg_segmentation_mask (Lambda)  (None, 256, 312, 1)  0          ['segmentation_probability_map[  N          
+                                                                 1][0]']                                     
+                                                                                                             
+=============================================================================================================
+Total params: 152,268,848
+Trainable params: 152,233,740
+Non-trainable params: 35,108
+_____________________________________________________________________________________________________________

@@ -172,3 +172,12 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+# custom
+logs/
+.git/
+.gitignore
+.DS_Store
+
+
